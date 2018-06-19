@@ -1,0 +1,37 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 26
+    defaultConfig {
+        applicationId "kangmei.com.txpush"
+        minSdkVersion 14
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+        ndk {
+            //选择要添加的对应cpu类型的.so库。
+            abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a','x86', 'x86_64', 'mips', 'mips64'
+            // 还可以添加 'x86', 'x86_64', 'mips', 'mips64'
+            manifestPlaceholders = [
+                    XG_ACCESS_ID:"2100296469",
+                    XG_ACCESS_KEY:"A6YG8Y19EL6Z",
+            ]
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
+    compile 'com.tencent.xinge:xinge:3.1.2-beta'
+    compile 'com.tencent.wup:wup:1.0.0.E-alpha'
+    compile 'com.tencent.mid:mid:3.9.0-alpha'
+    implementation project(':library')
+}
