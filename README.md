@@ -50,3 +50,49 @@ AndroidStudio 上可以使用 jcenter 远程仓库自动接入，不需要在项
 
     }
 ~~~
+#### 注意:</br>
+如果在添加以上 abiFilter 配置之后 Android Studio 出现以下提示：
+~~~
+ NDK integration is deprecated in the current plugin. Consider trying the new experimental plugin.
+~~~
+则在 Project 根目录的 gradle.properties 文件中添加：
+~~~
+ android.useDeprecatedNdk=true
+~~~
+####  如需监听消息请参考XGBaseReceiver接口或者是 demo 的 MessageReceiver 类。自行继承XGBaseReceiver并且在配置文件中配置如下内容：
+~~~
+ <receiver android:name="完整的类名如:com.qq.xgdemo.receiver.MessageReceiver"
+      android:exported="true" >
+      <intent-filter>
+          <!-- 接收消息透传 -->
+          <action android:name="com.tencent.android.tpush.action.PUSH_MESSAGE" />
+          <!-- 监听注册、反注册、设置/删除标签、通知被点击等处理结果 -->
+          <action android:name="com.tencent.android.tpush.action.FEEDBACK" />
+      </intent-filter>
+  </receiver>
+~~~
+### 打开Androidmanifest.xml，添加以下配置
+~~~
+ <meta-data android:name="com.tencent.rdm.uuid" android:value="39804993-ca65-409c-abd0-000ef2812090" />
+        <!-- 设置主界面的启动模式为singleTop，当应用在前他的时候不重新开启应用-->
+        <activity
+            android:name=".MainActivity"
+            android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- YOUR_PACKAGE_PATH.CustomPushReceiver需要改为自己的Receiver： -->
+        <receiver android:name=".receiver.MessageReceiver"
+            android:exported="true" >
+            <intent-filter>
+                <!-- 接收消息透传 -->
+                <action android:name="com.tencent.android.tpush.action.PUSH_MESSAGE" />
+                <!-- 监听注册、反注册、设置/删除标签、通知被点击等处理结果 -->
+                <action android:name="com.tencent.android.tpush.action.FEEDBACK" />
+            </intent-filter>
+        </receiver>
+~~~
